@@ -80,27 +80,27 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 </head>
 <body>
 <div class="hero">
-  <svg viewBox="0 -130 720 400" role="img" aria-label="Mountain scene. A trail climbs to the summit as you complete sessions.">
+  <svg viewBox="0 -130 720 400" role="img" aria-label="Table Mountain seen across the bay from Cape Town. A trail climbs to the plateau as you complete sessions.">
     <defs>
       <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe3bd"/><stop offset=".55" stop-color="#f6cfa6"/><stop offset="1" stop-color="#c4dde6"/></linearGradient>
-      <linearGradient id="peak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6d8f9b"/><stop offset="1" stop-color="#46656f"/></linearGradient>
+      <linearGradient id="peak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d939b"/><stop offset=".45" stop-color="#5b7782"/><stop offset="1" stop-color="#46656f"/></linearGradient>
     </defs>
     <rect y="-130" width="720" height="400" fill="url(#sky)"/>
-    <circle cx="600" cy="78" r="30" fill="#ffd27a"/><circle cx="600" cy="78" r="46" fill="#ffd27a" opacity=".25"/>
-    <polygon points="0,180 70,118 140,160 215,96 300,158 380,120 440,170 560,128 640,172 720,136 720,270 0,270" fill="#a9c0c9"/>
-    <polygon points="230,270 470,48 700,270" fill="url(#peak)"/>
-    <polygon points="470,48 436,80 452,77 466,94 481,79 503,83" fill="#fffaf0"/>
-    <polygon points="470,48 503,83 560,150 520,128 500,150 470,48" fill="#3c5861" opacity=".35"/>
-    <path d="M0,214 Q110,176 240,208 T480,220 T720,198 V270 H0Z" fill="#2f5d4a"/>
-    <g fill="#234a3a"><polygon points="52,172 40,208 64,208"/><polygon points="84,180 74,210 94,210"/><polygon points="150,176 138,206 162,206"/><polygon points="188,184 178,210 198,210"/><polygon points="590,180 578,212 602,212"/><polygon points="630,172 617,208 643,208"/><polygon points="672,178 661,206 683,206"/></g>
-    <path d="M0,252 C120,238 210,262 340,248 S570,240 720,254 V270 H0Z" fill="#7fb6cf"/>
-    <path d="M60,256 q14,-5 28,0 M250,258 q14,-5 28,0 M470,252 q14,-5 28,0" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7" stroke-linecap="round"/>
-    <path id="trail" d="M36,236 C130,226 200,222 262,206 S340,186 366,160 S408,122 432,98 S458,66 470,50" fill="none" stroke="#fff8e6" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
-    <path id="trailDone" d="M36,236 C130,226 200,222 262,206 S340,186 366,160 S408,122 432,98 S458,66 470,50" fill="none" stroke="#f2a03d" stroke-width="4" stroke-linecap="round"/>
-    <line x1="470" y1="50" x2="470" y2="26" stroke="#5a3a22" stroke-width="2"/><polygon points="470,26 490,32 470,39" fill="#c2402e"/>
-    <circle id="hiker" cx="36" cy="236" r="8" fill="#f2a03d" stroke="#fff" stroke-width="3"/>
+    <circle cx="640" cy="40" r="30" fill="#ffd27a"/><circle cx="640" cy="40" r="46" fill="#ffd27a" opacity=".25"/>
+    <polygon points="0,200 60,172 120,132 170,92 205,118 235,128 256,86 270,70 300,68 360,71 430,68 500,70 512,88 530,136 556,128 580,104 590,98 600,106 625,150 670,162 720,172 720,270 0,270" fill="url(#peak)"/>
+    <g fill="none" stroke="#3c5861" stroke-width="2" opacity=".5" stroke-linecap="round"><path d="M300,72 L295,118"/><path d="M340,74 L338,108"/><path d="M430,72 L434,120"/><path d="M470,73 L474,112"/><path d="M170,96 L176,128"/></g>
+    <g fill="#fffaf0" opacity=".92"><ellipse cx="300" cy="63" rx="36" ry="9"/><ellipse cx="342" cy="59" rx="28" ry="9"/><ellipse cx="268" cy="72" rx="20" ry="8"/><ellipse cx="258" cy="84" rx="10" ry="6"/></g>
+    <line x1="548" y1="176" x2="497" y2="68" stroke="#33474e" stroke-width="1.25"/><rect x="491" y="61" width="12" height="8" rx="1.5" fill="#33474e"/><rect x="518" y="118" width="10" height="8" rx="2" fill="#c2402e"/>
+    <path d="M0,214 Q120,186 240,180 T480,176 T720,194 V270 H0Z" fill="#3d6b4c"/>
+    <path d="M0,232 Q160,214 330,222 T720,218 V270 H0Z" fill="#2f5d4a"/>
+    <path d="M0,244 C120,236 240,250 360,242 S600,236 720,246 V270 H0Z" fill="#5fa3c4"/>
+    <path d="M70,256 q14,-5 28,0 M250,260 q14,-5 28,0 M450,254 q14,-5 28,0 M610,260 q14,-5 28,0" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7" stroke-linecap="round"/>
+    <path id="trail" d="M36,238 C120,230 200,216 262,202 S340,182 360,152 S378,112 382,92 S384,78 385,71" fill="none" stroke="#fff8e6" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <path id="trailDone" d="M36,238 C120,230 200,216 262,202 S340,182 360,152 S378,112 382,92 S384,78 385,71" fill="none" stroke="#f2a03d" stroke-width="4" stroke-linecap="round"/>
+    <line x1="385" y1="71" x2="385" y2="36" stroke="#5a3a22" stroke-width="2"/><svg x="386" y="36" width="33" height="22" viewBox="0 0 90 60"><title>South African flag</title><rect width="90" height="30" fill="#E03C31"/><rect y="30" width="90" height="30" fill="#001489"/><path d="M0,0 L45,30 H90 M0,60 L45,30" fill="none" stroke="#fff" stroke-width="20"/><path d="M0,0 L45,30 H90 M0,60 L45,30" fill="none" stroke="#007749" stroke-width="12"/><polygon points="0,12 27,30 0,48" fill="#FFB81C"/><polygon points="0,19 16.5,30 0,41" fill="#000"/></svg>
+    <circle id="hiker" cx="36" cy="238" r="8" fill="#f2a03d" stroke="#fff" stroke-width="3"/>
   </svg>
-  <div class="hero-text"><h1>Denzil's Training Tracker</h1><p id="why">Training for summits in the Rockies</p></div>
+  <div class="hero-text"><h1>Denzil's Training Tracker</h1><p id="why">Cape Town bound on December 10</p></div>
 </div>
 <header>
   <div class="sub"><span id="blockLabel"></span><span id="count"></span></div>
@@ -203,7 +203,7 @@ function render(){
  for(var w0=0;w0<4;w0++){if(today>=dateFor(w0,0))openWeek=w0;}
  for(var w=0;w<4;w++){
   var keys=weekKeys(w);
-  html+='<details class="week" data-w="'+w+'"'+(w===openWeek?' open':'')+'><summary><div class="wk-top"><span>Week '+(w+1)+': '+fmt(dateFor(w,0))+' to '+fmt(dateFor(w,lastDay(w)))+' <span class="stage">'+['Trailhead','Treeline','The ridge','Summit push'][w]+'</span></span><span data-wc="'+w+'"></span></div><div class="bar small"><i data-wb="'+w+'"></i></div></summary>';
+  html+='<details class="week" data-w="'+w+'"'+(w===openWeek?' open':'')+'><summary><div class="wk-top"><span>Week '+(w+1)+': '+fmt(dateFor(w,0))+' to '+fmt(dateFor(w,lastDay(w)))+' <span class="stage">'+['Trailhead','Contour path','The gorge','Summit push'][w]+'</span></span><span data-wc="'+w+'"></span></div><div class="bar small"><i data-wb="'+w+'"></i></div></summary>';
   for(var d=0;d<7;d++){
    if(!active(w,d))continue;
    var dt=dateFor(w,d),sid=sessionFor(w,d);
@@ -230,7 +230,7 @@ function progress(){
  document.getElementById('bar').style.width=pct+'%';
  document.getElementById('barWrap').setAttribute('aria-valuenow',pct);
  document.getElementById('count').textContent=t+' of '+all.length+' done · '+pct+'%';
- var f=t/all.length,stage=f>=1?'Summit reached':f>=.75?'Summit push':f>=.5?'On the ridge':f>=.25?'Above treeline':'At the trailhead';
+ var f=t/all.length,stage=f>=1?'On top of Table Mountain':f>=.75?'Summit push':f>=.5?'In the gorge':f>=.25?'On the contour path':'At the trailhead';
  document.getElementById('blockLabel').innerHTML='Block '+(mem.block+1)+' · <b>'+stage+'</b>';
  try{
   var tr=document.getElementById('trailDone'),len=tr.getTotalLength(),pt=tr.getPointAtLength(len*f),hk=document.getElementById('hiker');
@@ -238,7 +238,7 @@ function progress(){
   hk.setAttribute('cx',pt.x);hk.setAttribute('cy',pt.y);
  }catch(e){}
 }
-var WHY=['Training for summits in the Rockies','Training for enduro days on the trail bike','Training for long days wading the river','Training for drift boat days on the Bow','Training to carry the camera further','Training for nights under canvas'],wi=0;
+var WHY=['Cape Town bound on December 10','Training for summits in the Rockies','Training for enduro days on the trail bike','Training for long days wading the river','Training for drift boat days on the Bow','Training to carry the camera further','Training for nights under canvas'],wi=0;
 setInterval(function(){var el=document.getElementById('why');el.style.opacity=0;el.style.transform='translateY(8px)';setTimeout(function(){wi=(wi+1)%WHY.length;el.textContent=WHY[wi];el.style.opacity=1;el.style.transform='none';},400);},6000);
 
 var dlg=document.getElementById('dlg');
