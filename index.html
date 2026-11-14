@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Training">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#2f6b52">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Denzil's Training Tracker</title>
+<style>
+:root{--bg:#f3efe6;--card:#fffdf8;--ink:#1e2a26;--quiet:#647169;--line:#ddd6c6;--accent:#2f6b52;--accent-soft:#e3eee6;--today:#fdf1d6;--hard:#c2602e;--sun:#f2a03d}
+@media (prefers-color-scheme:dark){:root{--bg:#101816;--card:#18221f;--ink:#e9efe9;--quiet:#93a39b;--line:#2a3733;--accent:#6fc3a0;--accent-soft:#1c332c;--today:#3a3320;--hard:#ee9a66;--sun:#f2a03d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+.hero{position:relative;max-width:720px;margin:0 auto;overflow:hidden}
+.hero svg{display:block;width:100%;height:auto}
+.hero-text{position:absolute;left:16px;right:16px;top:calc(12px + env(safe-area-inset-top));color:#1e3a30}
+h1{font:800 clamp(1.7rem,6.2vw,2.5rem)/1.05 Outfit,"Avenir Next","Segoe UI",system-ui,sans-serif;margin:0 0 4px;letter-spacing:-.02em}
+#why{margin:0;font:600 clamp(1.05rem,3.9vw,1.4rem)/1.2 Outfit,"Avenir Next","Segoe UI",system-ui,sans-serif;color:#b0501f;transition:opacity .4s,transform .4s}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px 12px;border-bottom:1px solid var(--line);max-width:720px;margin:0 auto}
+.sub{color:var(--quiet);font-size:.85rem;display:flex;justify-content:space-between;gap:8px}
+.sub b{color:var(--accent)}
+.bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--sun));border-radius:6px;transition:width .3s}
+.stage{font:600 .72rem Outfit,"Avenir Next","Segoe UI",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--hard);margin-left:4px}
+#hiker,#trailDone{transition:all .4s}
+.bar.small{height:6px;margin-top:6px}
+main{max-width:720px;margin:0 auto;padding:12px 12px 40px}
+.week{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.week>summary{list-style:none;cursor:pointer;padding:12px 14px}
+.week>summary::-webkit-details-marker{display:none}
+.wk-top,.dh h2{font-family:Outfit,"Avenir Next","Segoe UI",system-ui,sans-serif}
+.wk-top{display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+.wk-top span:last-child{font-weight:400;color:var(--quiet);font-size:.85rem}
+.day{display:grid;grid-template-columns:64px 1fr;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+.day.today{background:var(--today)}
+.dname{font-weight:600;font-size:.9rem}
+.ddate{color:var(--quiet);font-size:.78rem}
+.item{display:flex;align-items:center;gap:10px;min-height:40px}
+.item input{width:24px;height:24px;flex:none;accent-color:var(--accent);margin:0}
+.item button.link{position:relative;flex:1;text-align:left;background:none;border:0;padding:6px 22px 6px 0;font:inherit;color:var(--ink);cursor:pointer}
+.item button.link b{font-weight:600}
+.item button.link small{display:block;color:var(--quiet);font-size:.8rem}
+.item button.link::after{content:"\203A";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:1.3rem;color:var(--accent);font-weight:700}
+.item.done button.link{color:var(--quiet);text-decoration:line-through}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--hard);margin-left:6px;text-decoration:none}
+.off{color:var(--quiet);font-size:.9rem;padding:8px 0}
+.yoga{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.yoga input{width:24px;height:24px;accent-color:var(--accent);margin:0}
+.yoga button.link{background:none;border:0;font:inherit;color:var(--ink);padding:0;cursor:pointer;font-weight:600;margin-right:auto}
+.yoga button.link::after{content:"  \203A";color:var(--accent)}
+.foot{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.9rem;padding:10px 14px;border-radius:10px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.warn{color:var(--hard)}
+dialog{border:0;border-radius:16px;padding:0;width:min(640px,94vw);max-height:88vh;background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dh{position:sticky;top:0;background:var(--card);display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.dh h2{font-size:1.05rem;margin:0}
+.dh button{border:0;background:var(--accent-soft);color:var(--accent);font:inherit;font-weight:700;border-radius:8px;padding:6px 12px;cursor:pointer}
+.db{padding:14px 16px 20px;overflow:auto}
+.db p{margin:.4em 0 .8em}
+.db ul,.db ol{margin:.4em 0 .8em;padding-left:1.2em}
+.db li{margin:.25em 0}
+.ex{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.ex svg{width:120px;height:72px;background:var(--accent-soft);border-radius:8px}
+.ex b{display:block}
+.ex span{font-size:.88rem;color:var(--quiet)}
+.note{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="hero">
+  <svg viewBox="0 -130 720 400" role="img" aria-label="Mountain scene. A trail climbs to the summit as you complete sessions.">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe3bd"/><stop offset=".55" stop-color="#f6cfa6"/><stop offset="1" stop-color="#c4dde6"/></linearGradient>
+      <linearGradient id="peak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6d8f9b"/><stop offset="1" stop-color="#46656f"/></linearGradient>
+    </defs>
+    <rect y="-130" width="720" height="400" fill="url(#sky)"/>
+    <circle cx="600" cy="78" r="30" fill="#ffd27a"/><circle cx="600" cy="78" r="46" fill="#ffd27a" opacity=".25"/>
+    <polygon points="0,180 70,118 140,160 215,96 300,158 380,120 440,170 560,128 640,172 720,136 720,270 0,270" fill="#a9c0c9"/>
+    <polygon points="230,270 470,48 700,270" fill="url(#peak)"/>
+    <polygon points="470,48 436,80 452,77 466,94 481,79 503,83" fill="#fffaf0"/>
+    <polygon points="470,48 503,83 560,150 520,128 500,150 470,48" fill="#3c5861" opacity=".35"/>
+    <path d="M0,214 Q110,176 240,208 T480,220 T720,198 V270 H0Z" fill="#2f5d4a"/>
+    <g fill="#234a3a"><polygon points="52,172 40,208 64,208"/><polygon points="84,180 74,210 94,210"/><polygon points="150,176 138,206 162,206"/><polygon points="188,184 178,210 198,210"/><polygon points="590,180 578,212 602,212"/><polygon points="630,172 617,208 643,208"/><polygon points="672,178 661,206 683,206"/></g>
+    <path d="M0,252 C120,238 210,262 340,248 S570,240 720,254 V270 H0Z" fill="#7fb6cf"/>
+    <path d="M60,256 q14,-5 28,0 M250,258 q14,-5 28,0 M470,252 q14,-5 28,0" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7" stroke-linecap="round"/>
+    <path id="trail" d="M36,236 C130,226 200,222 262,206 S340,186 366,160 S408,122 432,98 S458,66 470,50" fill="none" stroke="#fff8e6" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <path id="trailDone" d="M36,236 C130,226 200,222 262,206 S340,186 366,160 S408,122 432,98 S458,66 470,50" fill="none" stroke="#f2a03d" stroke-width="4" stroke-linecap="round"/>
+    <line x1="470" y1="50" x2="470" y2="26" stroke="#5a3a22" stroke-width="2"/><polygon points="470,26 490,32 470,39" fill="#c2402e"/>
+    <circle id="hiker" cx="36" cy="236" r="8" fill="#f2a03d" stroke="#fff" stroke-width="3"/>
+  </svg>
+  <div class="hero-text"><h1>Denzil's Training Tracker</h1><p id="why">Training for summits in the Rockies</p></div>
+</div>
+<header>
+  <div class="sub"><span id="blockLabel"></span><span id="count"></span></div>
+  <div class="bar" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" id="barWrap"><i id="bar"></i></div>
+</header>
+<main>
+  <div id="weeks"></div>
+  <div class="foot">
+    <button class="btn primary" id="nextBlock">Start next 4-week block</button>
+    <button class="btn warn" id="reset">Clear this block's checkmarks</button>
+  </div>
+</main>
+<dialog id="dlg"><div class="dh"><h2 id="dTitle"></h2><button id="dClose">Close</button></div><div class="db" id="dBody"></div></dialog>
+
+<script>
+(function(){
+'use strict';
+var KEY='denzil-training-v1';
+var BASE=new Date(2026,10,16); // Monday Nov 16, 2026
+var mem={block:0,checks:{}};
+function load(){try{var s=localStorage.getItem(KEY);if(s){var o=JSON.parse(s);if(o&&typeof o==='object'){mem.block=o.block||0;mem.checks=o.checks||{};}}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
+
+// Stick figure data: h=head [x,y], b=body polylines, d=dashed (band/strap), w=weight
+var EX={
+ catcow:{n:'Cat-cow',r:'10 slow reps',how:'On hands and knees. Round the back up toward the ceiling, then let it sag gently. Move slowly, pain-free range only.',h:[156,80],b:['140,110 140,72 105,58 70,72 70,110 40,110']},
+ birddog:{n:'Bird dog',r:'6 per side, 8-second holds',how:'Reach one arm forward and the opposite leg back, level with the spine. Hips stay square to the floor.',h:[150,54],b:['135,110 135,72 75,72 75,110 45,110','135,72 182,66','75,72 18,70']},
+ curlup:{n:'Modified curl-up',r:'6 x 8-second holds',how:'On your back, one knee bent, hands under the low back. Lift head and shoulders a few centimetres as one unit. Chin tucked, low back does not flatten.',h:[30,93],b:['45,101 110,104 180,107','110,104 140,72 160,108','45,101 70,110 88,107']},
+ sideknee:{n:'Side plank from knees',r:'3 x 10 seconds per side',how:'Elbow under shoulder, knees bent. Lift the hips so knees, hips and shoulders form a straight line.',h:[50,63],b:['85,110 60,110 60,76 150,110 188,110','60,76 88,74 108,92']},
+ bridge:{n:'Glute bridge',r:'10 reps',how:'Knees bent, feet flat. Squeeze the glutes and lift until knees, hips and shoulders line up. Do not arch the low back at the top.',h:[25,102],b:['40,106 105,78 140,66 150,110','40,106 88,109']},
+ hamstring:{n:'Lying hamstring stretch',r:'60 seconds per leg',how:'On your back, strap around one foot. Raise that leg, knee nearly straight, to a firm stretch. Other leg and low back stay on the floor.',h:[25,100],b:['40,104 105,106 180,108','105,106 120,35','40,104 75,80'],d:['75,80 120,35']},
+ goblet:{n:'Goblet squat',r:'8 to 12 reps',how:'Both dumbbells at the chest, feet shoulder width. Sit down and back, chest tall, knees over toes. As deep as a flat back allows.',h:[100,32],b:['95,110 120,82 80,78 95,45','95,110 112,110','95,45 106,62 112,50'],w:['106,48 118,52']},
+ stepup:{n:'Step-up',r:'8 to 12 per leg',how:'Stair or sturdy box, knee height or lower. Whole foot on the step, drive through that heel, lower under control. All reps on one leg, then switch.',h:[109,12],b:['112,113 112,85 168,85 168,113','100,55 128,62 125,85','100,55 95,85 88,110','100,55 106,24','106,26 103,54'],w:['97,58 109,58']},
+ split:{n:'Split squat',r:'8 to 12 per leg',how:'Long stride stance. Drop the back knee straight toward the floor, torso upright, front knee over the ankle.',h:[100,27],b:['130,110 130,80 100,75 80,104 55,108','100,75 100,40','100,42 101,70'],w:['95,74 107,74']},
+ hinge:{n:'Banded hip hinge',r:'10 to 12 reps',how:'Band around the hips, anchored low behind you. Step forward until taut. Soft knees, push the hips back against the band, spine long, then squeeze the glutes to stand.',h:[144,38],b:['100,110 103,82 88,60 130,42','100,110 116,110','130,42 128,72','20,96 20,113'],d:['20,106 88,60']},
+ balance:{n:'Single-leg balance reach',r:'30 seconds or 8 reaches per side',how:'Stand on one leg, soft knee. Hinge forward and reach the opposite hand toward the floor as the free leg extends behind. Stand up without touching down.',h:[142,44],b:['100,110 104,84 95,60 128,48','100,110 116,110','95,60 45,62','128,48 150,76']},
+ pushup:{n:'Push-up',r:'8 to 12 reps',how:'Hands under shoulders, body in one line. Chest to just above the floor, elbows about 45 degrees. Too hard: hands on a bench or stair.',h:[156,72],b:['140,110 140,80 30,108']},
+ row:{n:'Band row',r:'10 to 12 reps',how:'Band anchored at chest height. Stand tall, arms straight, pull the elbows back past the ribs, squeeze the shoulder blades, return slowly.',h:[80,22],b:['80,110 80,35','80,110 95,110','80,35 60,52 95,50','185,35 185,65'],d:['95,50 185,50']},
+ press:{n:'Overhead press',r:'8 to 12 reps',how:'Dumbbells at the shoulders, ribs down, glutes tight. Press straight up, lower slowly. Stop the set if you have to lean back.',h:[94,33],b:['100,110 100,46','100,110 115,110','100,46 113,32 107,13'],w:['100,9 114,9']},
+ pallof:{n:'Pallof press (front view)',r:'8 per side, 2-second holds',how:'Band anchored at chest height, stand side-on. Hands at the chest, step away until taut. Press straight out, hold, return. Hips and shoulders stay square.',h:[100,26],b:['82,40 118,40','100,40 100,72','100,72 86,110','100,72 114,110','82,40 100,54 118,40','15,38 15,68'],d:['15,54 100,54']},
+ sideplank:{n:'Side plank',r:'15 to 20 seconds per side',how:'Same as the morning version. Go from the feet once the knee version feels easy. Hips high, body in one line.',h:[43,63],b:['80,110 55,110 55,74 180,110','55,74 62,44']},
+ carry:{n:'Suitcase carry (front view)',r:'20 to 30 metres per hand',how:'Heaviest dumbbell or a loaded bag in one hand. Walk tall with shoulders level. Do not lean.',h:[100,24],b:['84,38 116,38','100,38 100,70','100,70 90,110','100,70 112,110','116,38 121,72','84,38 79,68'],w:['115,77 127,77']}
+};
+function fig(e){
+ var s='<svg viewBox="0 0 200 120" role="img" aria-label="'+e.n+' position" fill="none" stroke-linecap="round" stroke-linejoin="round">';
+ s+='<line x1="4" y1="114" x2="196" y2="114" stroke="var(--line)" stroke-width="1.5"/>';
+ s+='<circle cx="'+e.h[0]+'" cy="'+e.h[1]+'" r="7" stroke="var(--ink)" stroke-width="3"/>';
+ e.b.forEach(function(p){s+='<polyline points="'+p+'" stroke="var(--ink)" stroke-width="3"/>';});
+ (e.d||[]).forEach(function(p){s+='<polyline points="'+p+'" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="5 4"/>';});
+ (e.w||[]).forEach(function(p){s+='<polyline points="'+p+'" stroke="var(--accent)" stroke-width="7"/>';});
+ return s+'</svg>';
+}
+function exList(ids){return ids.map(function(id,i){var e=EX[id];return '<div class="ex">'+fig(e)+'<div><b>'+(i+1)+'. '+e.n+'</b><span>'+e.r+'</span><br>'+e.how+'</div></div>';}).join('');}
+var KEYNOTE='<p class="note">Dashed line = band or strap. Thick bar = dumbbell.</p>';
+
+function tempoMin(w){return Math.min(35,20+5*mem.block+(w>=2?5:0));}
+var S={
+ m10:{t:'Morning 10',time:'10 min',body:function(){return '<p>Every day on waking. Targets the morning back ache and builds spine stability.</p>'+KEYNOTE+exList(['catcow','birddog','curlup','sideknee','bridge','hamstring']);}},
+ A:{t:'Strength A',time:'30 min',sub:'Legs and hips circuit',body:function(){return '<p>3 to 4 rounds as a circuit, 45 seconds rest between rounds. Tempo: 3 seconds down, 1 second pause, then up.</p>'+KEYNOTE+exList(['goblet','stepup','split','hinge','balance']);}},
+ B:{t:'Strength B',time:'30 min',sub:'Upper body and core circuit',body:function(){return '<p>3 to 4 rounds as a circuit, 45 seconds rest between rounds. Tempo: 3 seconds down, 1 second pause, then up.</p>'+KEYNOTE+exList(['pushup','row','press','pallof','sideplank','carry']);}},
+ INT:{t:'Echelon intervals',time:'40 min',sub:'5 x 4 min hard',hard:1,body:function(){return '<ol><li>10 min warm-up, easy spin</li><li>5 x 4 minutes hard, 3 minutes easy between</li><li>5 min cool-down</li></ol><p>Hard means you can only get out a few words. An Echelon class tagged HIIT or power intervals does the same job.</p>';}},
+ SPR:{t:'Echelon sprints',time:'35 min',sub:'10 x 30 sec all-out',hard:1,body:function(){return '<ol><li>10 min warm-up, easy spin</li><li>10 x 30 seconds all-out, 90 seconds easy between</li><li>5 min cool-down</li></ol><p>All-out means nothing left at second 30. Keep the easy spins truly easy.</p>';}},
+ TEMPO:{t:'Tempo run',time:function(w){return (tempoMin(w)+15)+' min';},sub:function(w){return tempoMin(w)+' min tempo block';},hard:1,body:function(w){return '<ol><li>10 min easy</li><li>'+tempoMin(w)+' min comfortably hard: breathing heavily, a pace you could hold for about an hour at most</li><li>5 min easy</li></ol><p class="note">Back check: if your back is worse the morning after a run, swap this for a second bike session for a couple of weeks.</p>';}},
+ HIKE:{t:'Hike or snowshoe',time:'60 to 90 min',sub:'With a pack',body:function(){return '<p>Outdoors with a pack. Steady effort you could hold a conversation at, with hills where you can find them.</p><p>No time or bad weather: swap for the treadmill hill session or the Echelon endurance ride.</p>';}},
+ RIDE:{t:'Echelon endurance ride',time:'75 to 90 min',sub:'Steady',body:function(){return '<p>Steady, conversational effort for the full ride. No intervals. This builds the base that makes long days on the trail bike easy.</p>';}},
+ HILLS:{t:'Treadmill hills',time:'60 min',sub:'6 x 5 min at 10 to 12%',body:function(){return '<ol><li>10 min warm-up walk</li><li>6 x 5 minutes walking fast at 10 to 12% grade, 2 minutes flat between</li><li>8 min cool-down walk</li></ol><p>This is the summit training. Do not hold the handrails.</p>';}},
+ YOGA:{t:'YOGABODY evening stretch',time:'10 min',body:function(){return '<p>Any three evenings a week, 10 minutes.</p><ul><li>Lying-down hamstring and hip stretches only</li><li>Skip seated and standing forward folds for now. Folds round the lower back under load.</li></ul>';}}
+};
+var DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function sessionFor(w,d){
+ if(d===0)return 'A'; if(d===1)return w%2===0?'INT':'SPR'; if(d===2)return 'TEMPO'; if(d===3)return 'B';
+ if(d===5)return ['HIKE','RIDE','HILLS','HIKE'][w]; return null;
+}
+function val(v,w){return typeof v==='function'?v(w):v;}
+function startDate(){var d=new Date(BASE);d.setDate(d.getDate()+28*mem.block);return d;}
+function dateFor(w,d){var x=startDate();x.setDate(x.getDate()+7*w+d);return x;}
+function fmt(x){return x.toLocaleDateString('en-CA',{month:'short',day:'numeric'});}
+function k(w,s){return 'b'+mem.block+'-w'+w+'-'+s;}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function item(key,sid,w){
+ var s=S[sid],on=!!mem.checks[key];
+ var sub=[val(s.sub,w),val(s.time,w)].filter(Boolean).join(' · ');
+ return '<div class="item'+(on?' done':'')+'"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+' aria-label="'+esc(s.t)+' done"><button class="link" data-s="'+sid+'" data-w="'+w+'"><b>'+esc(s.t)+'</b>'+(s.hard?'<span class="tag">hard</span>':'')+'<small>'+esc(sub)+'</small></button></div>';
+}
+function weekKeys(w){
+ var a=[];for(var d=0;d<7;d++){a.push(k(w,'d'+d+'-m'));if(sessionFor(w,d))a.push(k(w,'d'+d+'-s'));}
+ for(var y=0;y<3;y++)a.push(k(w,'y'+y));return a;
+}
+function done(keys){return keys.filter(function(x){return mem.checks[x];}).length;}
+
+function render(){
+ var today=new Date();today.setHours(0,0,0,0);
+ var html='',openWeek=0;
+ for(var w0=0;w0<4;w0++){if(today>=dateFor(w0,0))openWeek=w0;}
+ for(var w=0;w<4;w++){
+  var keys=weekKeys(w);
+  html+='<details class="week" data-w="'+w+'"'+(w===openWeek?' open':'')+'><summary><div class="wk-top"><span>Week '+(w+1)+': '+fmt(dateFor(w,0))+' to '+fmt(dateFor(w,6))+' <span class="stage">'+['Trailhead','Treeline','The ridge','Summit push'][w]+'</span></span><span data-wc="'+w+'"></span></div><div class="bar small"><i data-wb="'+w+'"></i></div></summary>';
+  for(var d=0;d<7;d++){
+   var dt=dateFor(w,d),sid=sessionFor(w,d);
+   html+='<div class="day'+(dt.getTime()===today.getTime()?' today':'')+'"><div><div class="dname">'+DAYS[d]+'</div><div class="ddate">'+fmt(dt)+'</div></div><div>';
+   html+=item(k(w,'d'+d+'-m'),'m10',w);
+   html+=sid?item(k(w,'d'+d+'-s'),sid,w):'<div class="off">'+(d===6?'Off, or an easy family walk':'Off')+'</div>';
+   html+='</div></div>';
+  }
+  html+='<div class="yoga"><button class="link" data-s="YOGA" data-w="'+w+'">YOGABODY x 3</button>';
+  for(var y=0;y<3;y++){var yk=k(w,'y'+y);html+='<input type="checkbox" data-k="'+yk+'"'+(mem.checks[yk]?' checked':'')+' aria-label="YOGABODY evening '+(y+1)+'">';}
+  html+='</div></details>';
+ }
+ document.getElementById('weeks').innerHTML=html;
+ progress();
+}
+function progress(){
+ var all=[];
+ for(var w=0;w<4;w++){
+  var keys=weekKeys(w),n=done(keys);all=all.concat(keys);
+  document.querySelector('[data-wb="'+w+'"]').style.width=(100*n/keys.length)+'%';
+  document.querySelector('[data-wc="'+w+'"]').textContent=n+' / '+keys.length;
+ }
+ var t=done(all),pct=Math.round(100*t/all.length);
+ document.getElementById('bar').style.width=pct+'%';
+ document.getElementById('barWrap').setAttribute('aria-valuenow',pct);
+ document.getElementById('count').textContent=t+' of '+all.length+' done · '+pct+'%';
+ var f=t/all.length,stage=f>=1?'Summit reached':f>=.75?'Summit push':f>=.5?'On the ridge':f>=.25?'Above treeline':'At the trailhead';
+ document.getElementById('blockLabel').innerHTML='Block '+(mem.block+1)+' · <b>'+stage+'</b>';
+ try{
+  var tr=document.getElementById('trailDone'),len=tr.getTotalLength(),pt=tr.getPointAtLength(len*f),hk=document.getElementById('hiker');
+  tr.style.strokeDasharray=len;tr.style.strokeDashoffset=len*(1-f);
+  hk.setAttribute('cx',pt.x);hk.setAttribute('cy',pt.y);
+ }catch(e){}
+}
+var WHY=['Training for summits in the Rockies','Training for enduro days on the trail bike','Training for long days wading the river','Training for drift boat days on the Bow','Training to carry the camera further','Training for nights under canvas'],wi=0;
+setInterval(function(){var el=document.getElementById('why');el.style.opacity=0;el.style.transform='translateY(8px)';setTimeout(function(){wi=(wi+1)%WHY.length;el.textContent=WHY[wi];el.style.opacity=1;el.style.transform='none';},400);},6000);
+
+var dlg=document.getElementById('dlg');
+function openSession(sid,w){
+ var s=S[sid];
+ document.getElementById('dTitle').textContent=s.t+' · '+val(s.time,w);
+ document.getElementById('dBody').innerHTML=s.body(w);
+ if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');
+ document.getElementById('dBody').scrollTop=0;
+}
+function closeDlg(){if(dlg.close)dlg.close();else dlg.removeAttribute('open');}
+document.getElementById('dClose').addEventListener('click',closeDlg);
+dlg.addEventListener('click',function(e){if(e.target===dlg)closeDlg();});
+
+document.getElementById('weeks').addEventListener('change',function(e){
+ var key=e.target.getAttribute('data-k');if(!key)return;
+ if(e.target.checked)mem.checks[key]=1;else delete mem.checks[key];
+ save();
+ var it=e.target.closest('.item');if(it)it.classList.toggle('done',e.target.checked);
+ progress();
+});
+document.getElementById('weeks').addEventListener('click',function(e){
+ var b=e.target.closest('button.link');if(!b)return;
+ e.preventDefault();openSession(b.getAttribute('data-s'),+b.getAttribute('data-w'));
+});
+
+function armed(btn,label,confirmLabel,fn){
+ var t=null;
+ btn.addEventListener('click',function(){
+  if(t){clearTimeout(t);t=null;btn.textContent=label;fn();return;}
+  btn.textContent=confirmLabel;
+  t=setTimeout(function(){t=null;btn.textContent=label;},4000);
+ });
+}
+armed(document.getElementById('reset'),"Clear this block's checkmarks",'Tap again to clear',function(){
+ var p='b'+mem.block+'-';Object.keys(mem.checks).forEach(function(x){if(x.indexOf(p)===0)delete mem.checks[x];});
+ save();render();
+});
+armed(document.getElementById('nextBlock'),'Start next 4-week block','Tap again to start block',function(){
+ mem.block+=1;save();render();window.scrollTo(0,0);
+});
+
+load();render();
+})();
+</script>
+</body>
+</html>
