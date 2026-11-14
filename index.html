@@ -12,8 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <title>Denzil's Training Tracker</title>
 <style>
-:root{--bg:#f3efe6;--card:#fffdf8;--ink:#1e2a26;--quiet:#647169;--line:#ddd6c6;--accent:#2f6b52;--accent-soft:#e3eee6;--today:#fdf1d6;--hard:#c2602e;--sun:#f2a03d}
-@media (prefers-color-scheme:dark){:root{--bg:#101816;--card:#18221f;--ink:#e9efe9;--quiet:#93a39b;--line:#2a3733;--accent:#6fc3a0;--accent-soft:#1c332c;--today:#3a3320;--hard:#ee9a66;--sun:#f2a03d}}
+:root{--bg:#f3efe6;--card:#fffdf8;--ink:#1e2a26;--quiet:#647169;--line:#ddd6c6;--accent:#2f6b52;--accent-soft:#e3eee6;--today:#fdf1d6;--hard:#c2602e;--sun:#f2a03d;--min:#2b7fb8;--min-soft:#e1eff8}
+@media (prefers-color-scheme:dark){:root{--bg:#101816;--card:#18221f;--ink:#e9efe9;--quiet:#93a39b;--line:#2a3733;--accent:#6fc3a0;--accent-soft:#1c332c;--today:#3a3320;--hard:#ee9a66;--sun:#f2a03d;--min:#6bb5e6;--min-soft:#16303f}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
 .hero{position:relative;max-width:720px;margin:0 auto;overflow:hidden}
@@ -48,6 +48,11 @@ main{max-width:720px;margin:0 auto;padding:12px 12px 40px}
 .item button.link::after{content:"\203A";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:1.3rem;color:var(--accent);font-weight:700}
 .item.done button.link{color:var(--quiet);text-decoration:line-through}
 .tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--hard);margin-left:6px;text-decoration:none}
+.item.min{background:var(--min-soft);border-left:4px solid var(--min);border-radius:8px;padding-left:8px;margin:3px 0}
+.item.min input{accent-color:var(--min)}
+.tag.mn{color:var(--min)}
+.legend{display:flex;align-items:flex-start;gap:10px;background:var(--min-soft);border-left:4px solid var(--min);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.88rem}
+.legend b{color:var(--min)}
 .off{color:var(--quiet);font-size:.9rem;padding:8px 0}
 .yoga{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);flex-wrap:wrap}
 .yoga input{width:24px;height:24px;accent-color:var(--accent);margin:0}
@@ -102,6 +107,7 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
   <div class="bar" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" id="barWrap"><i id="bar"></i></div>
 </header>
 <main>
+  <div class="legend"><span><b>Blue = bare minimum week.</b> When life wins, do just these: Morning 10 daily, Tuesday intervals, one strength circuit (A or B), and the weekend effort.</span></div>
   <div id="weeks"></div>
   <div class="foot">
     <button class="btn primary" id="nextBlock">Start next 4-week block</button>
@@ -173,17 +179,21 @@ function val(v,w){return typeof v==='function'?v(w):v;}
 function startDate(){var d=new Date(BASE);d.setDate(d.getDate()+28*mem.block);return d;}
 function dateFor(w,d){var x=startDate();x.setDate(x.getDate()+7*w+d);return x;}
 function fmt(x){return x.toLocaleDateString('en-CA',{month:'short',day:'numeric'});}
+var END0=new Date(2026,11,9); // block 1 ends Wed Dec 9, 2026
+function active(w,d){return mem.block!==0||dateFor(w,d)<=END0;}
+function lastDay(w){var n=-1;for(var d=0;d<7;d++)if(active(w,d))n=d;return n;}
+function yogaN(w){return Math.min(3,Math.ceil((lastDay(w)+1)*3/7));}
 function k(w,s){return 'b'+mem.block+'-w'+w+'-'+s;}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
-function item(key,sid,w){
+function item(key,sid,w,mn){
  var s=S[sid],on=!!mem.checks[key];
  var sub=[val(s.sub,w),val(s.time,w)].filter(Boolean).join(' · ');
- return '<div class="item'+(on?' done':'')+'"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+' aria-label="'+esc(s.t)+' done"><button class="link" data-s="'+sid+'" data-w="'+w+'"><b>'+esc(s.t)+'</b>'+(s.hard?'<span class="tag">hard</span>':'')+'<small>'+esc(sub)+'</small></button></div>';
+ return '<div class="item'+(on?' done':'')+(mn?' min':'')+'"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+' aria-label="'+esc(s.t)+' done"><button class="link" data-s="'+sid+'" data-w="'+w+'"><b>'+esc(s.t)+'</b>'+(s.hard?'<span class="tag">hard</span>':'')+(mn?'<span class="tag mn">min</span>':'')+'<small>'+esc(sub)+'</small></button></div>';
 }
 function weekKeys(w){
- var a=[];for(var d=0;d<7;d++){a.push(k(w,'d'+d+'-m'));if(sessionFor(w,d))a.push(k(w,'d'+d+'-s'));}
- for(var y=0;y<3;y++)a.push(k(w,'y'+y));return a;
+ var a=[];for(var d=0;d<7;d++){if(!active(w,d))continue;a.push(k(w,'d'+d+'-m'));if(sessionFor(w,d))a.push(k(w,'d'+d+'-s'));}
+ for(var y=0;y<yogaN(w);y++)a.push(k(w,'y'+y));return a;
 }
 function done(keys){return keys.filter(function(x){return mem.checks[x];}).length;}
 
@@ -193,16 +203,17 @@ function render(){
  for(var w0=0;w0<4;w0++){if(today>=dateFor(w0,0))openWeek=w0;}
  for(var w=0;w<4;w++){
   var keys=weekKeys(w);
-  html+='<details class="week" data-w="'+w+'"'+(w===openWeek?' open':'')+'><summary><div class="wk-top"><span>Week '+(w+1)+': '+fmt(dateFor(w,0))+' to '+fmt(dateFor(w,6))+' <span class="stage">'+['Trailhead','Treeline','The ridge','Summit push'][w]+'</span></span><span data-wc="'+w+'"></span></div><div class="bar small"><i data-wb="'+w+'"></i></div></summary>';
+  html+='<details class="week" data-w="'+w+'"'+(w===openWeek?' open':'')+'><summary><div class="wk-top"><span>Week '+(w+1)+': '+fmt(dateFor(w,0))+' to '+fmt(dateFor(w,lastDay(w)))+' <span class="stage">'+['Trailhead','Treeline','The ridge','Summit push'][w]+'</span></span><span data-wc="'+w+'"></span></div><div class="bar small"><i data-wb="'+w+'"></i></div></summary>';
   for(var d=0;d<7;d++){
+   if(!active(w,d))continue;
    var dt=dateFor(w,d),sid=sessionFor(w,d);
    html+='<div class="day'+(dt.getTime()===today.getTime()?' today':'')+'"><div><div class="dname">'+DAYS[d]+'</div><div class="ddate">'+fmt(dt)+'</div></div><div>';
-   html+=item(k(w,'d'+d+'-m'),'m10',w);
-   html+=sid?item(k(w,'d'+d+'-s'),sid,w):'<div class="off">'+(d===6?'Off, or an easy family walk':'Off')+'</div>';
+   html+=item(k(w,'d'+d+'-m'),'m10',w,true);
+   html+=sid?item(k(w,'d'+d+'-s'),sid,w,d===0||d===1||d===5):'<div class="off">'+(d===6?'Off, or an easy family walk':'Off')+'</div>';
    html+='</div></div>';
   }
-  html+='<div class="yoga"><button class="link" data-s="YOGA" data-w="'+w+'">YOGABODY x 3</button>';
-  for(var y=0;y<3;y++){var yk=k(w,'y'+y);html+='<input type="checkbox" data-k="'+yk+'"'+(mem.checks[yk]?' checked':'')+' aria-label="YOGABODY evening '+(y+1)+'">';}
+  html+='<div class="yoga"><button class="link" data-s="YOGA" data-w="'+w+'">YOGABODY x '+yogaN(w)+'</button>';
+  for(var y=0;y<yogaN(w);y++){var yk=k(w,'y'+y);html+='<input type="checkbox" data-k="'+yk+'"'+(mem.checks[yk]?' checked':'')+' aria-label="YOGABODY evening '+(y+1)+'">';}
   html+='</div></details>';
  }
  document.getElementById('weeks').innerHTML=html;
